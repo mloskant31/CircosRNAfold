@@ -40,7 +40,7 @@ Optional parameters can also be used:
 You must first <em>sample_data/example_data_TAIR10_chr_all.fas.gz</em> unpack and then:
 
 ```
-python3 circosrnafold.py --genes sample_data/example_data_gene.bed --bindings sample_data/example_data_binding_sites.bed --fasta sample_data/example_data_TAIR10_chr_all.fas -bw sample_data/example_data_iclip_plus.bw -m sample_data/example_data_mature_rna.bed --output circoplots
+python3 circosrnafold.py --genes sample_data/example_data_gene.bed --bindings sample_data/example_data_binding_sites.bed --fasta sample_data/example_data_TAIR10_chr_all.fas -bw sample_data/example_data_iCLIP_plus.bw -m sample_data/example_data_mature_rna.bed --output circoplots
 ```
 The binding sites and iCLIP data come from Meyer et al. (https://doi.org/10.1186/s13059-017-1332-x).
 
