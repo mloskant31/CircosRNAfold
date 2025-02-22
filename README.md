@@ -44,10 +44,12 @@ python3 circosrnafold.py --genes sample_data/example_data_gene.bed --bindings sa
 ```
 The binding sites and iCLIP data come from Meyer et al. (https://doi.org/10.1186/s13059-017-1332-x).
 
+## Gallery
+<img src="img/MIR775.png" width="400x400">
+The result plot for the test data set. From ~0 and from ~20 bp the binding sites can be seen (pink) and their iCLIP peaks (purple). At 250 bp the mature miRNA can be seen (orange). The legend is shown top left.
+
 # Setting raw data color(s)
 A maximum of four colors can be specified for the maximum of four bigWig files. There are the following four default colors: #800080 (purple), #006400 (green), #FF6347 (red), #4682B4 (blue). Depending on the number of bigWig files specified, the appropriate number of default colors are used in sequence as listed above. The default colors are used if no colors or too many/too few are specified by you. If this is the case, a message appears on the terminal. To specify the colors yourself, use the `-color` parameter followed by the colors in the hexadecimal system (without a preceding #).
-
-# Gallery
 
 
 # Input file format overview
