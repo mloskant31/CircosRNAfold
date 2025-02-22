@@ -15,9 +15,9 @@ git clone https://github.com/mloskant31/CircosRNAfold.git
 ```
 
 ## Prerequisites
-You can install the dependencies for using the script via the ```requirements.text``` file by running the following code:
+You can install the dependencies for using the script via the ```Requirements.text``` file by running the following code:
 ```
-pip install -r requirements.txt
+pip install -r Requirements.txt
 ```
 In addtition, Python 3.10 or higher is required.
 
