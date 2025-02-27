@@ -11,18 +11,18 @@ import math
 
 # Command line flags
 parser = ArgumentParser()
-parser.add_argument("-g", "--genes", dest="genes", help="The genes in BED format", required=True)
+parser.add_argument("-g", "--genes", dest="genes", help="The genomic coordinates of genes in BED format", required=True)
 parser.add_argument("-b", "--bindings", dest="bindings", nargs='+',
-                    help="The binding sites file(s) of proteins in BED format",
+                    help="The binding sites of proteins in BED format (max. 4 files)",
                     required=False)
-parser.add_argument("-fi", "--fasta", dest="fasta", help="The chromosomal sequences as a fasta file", required=True)
-parser.add_argument("-o", "--output", dest="output", help="Folder in which all pngs are saved", required=False,
+parser.add_argument("-fi", "--fasta", dest="fasta", help="The chromosomal sequences as a FASTA file", required=True)
+parser.add_argument("-o", "--output", dest="output", help="Name of the folder in which all PNGs are saved", required=False,
                     default="myCircos")
-parser.add_argument("-bw", dest="bw", nargs='+', help="BigWig file(s) with the raw data", required=False)
+parser.add_argument("-bw", dest="bw", nargs='+', help="BigWig file(s) with the raw data (max. 4 files)", required=False)
 parser.add_argument("-color", dest="color", nargs='+',
                     help="The colors for the iCLIP plots. If none or too few/too many colors are specified " +
-                         "than there are specified bw files, default colors are used", required=False)
-parser.add_argument("-m", dest="mature", help="The mature miRNAs in BED format", required=False)
+                         "than there are specified bw files, default colors are used (max. 4 colors)", required=False)
+parser.add_argument("-m", dest="mature", help="The mature miRNA locations in BED format", required=False)
 
 
 args = parser.parse_args()
