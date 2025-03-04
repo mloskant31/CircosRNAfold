@@ -40,7 +40,7 @@ Optional parameters:
 First, unpack the genome fasta:
 
 ```
-tar -xzf sample_data/example_data_TAIR10_chr_all.fas.gz
+gzip -d sample_data/example_data_TAIR10_chr_all.fas.gz
 ```
 Then, run CircosRNAfold with sample data:
 
