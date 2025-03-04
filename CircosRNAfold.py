@@ -36,14 +36,14 @@ os.mkdir(folder)
 
 if args.bindings and len(args.bindings) > 4:
     parser.error("A maximum of 4 arguments may be specified for --bindings.")
-if len(args.bw) > 4:
+if args.bw is not None and len(args.bw) > 4:
     parser.error("A maximum of 4 arguments may be specified for -bw.")
 
-if args.color is None or len(args.color) != len(args.bw):
+if args.bw is not None and (args.color is None or len(args.color) != len(args.bw)):
     print("Not as many colors as bw files were specified or no colors, therefore default colors are used")
     color_bws = ["#800080", "#006400", "#FF6347", "#4682B4"]  # purple, green, red, blue
     color_bws = color_bws[:len(args.bw)]
-else:
+elif args.bw is not None:
     color_bws = args.color
     color_bws = ["#" + color for color in color_bws]
 
@@ -201,7 +201,7 @@ for feature in bed_file:
 
     # Tick plot for sequence
     # Only printed if the sequence is not too long for the bases to be readable on the plot
-    # No longer visible if there are more than two bw files
+    # and only printed if there are less than three bw files
     if len(sequence) <= 240 and len(args.bw) < 3:
         rna_sequence = sequence.replace("T", "U")
         tick_positions = list(range(0, len(rna_sequence), 1))
@@ -262,51 +262,53 @@ for feature in bed_file:
             raxis_range_start = raxis_range_end + 62
             raxis_range_end = raxis_range_start + 20
 
-            # Barplot for mature miRNA
-        if args.mature is not None:
-            mirna_color = "#FF8800"
-            mirna_mature = args.mature
-            mature_dict = find_features_on_gene(mirna_mature, gene_id, gene_chrom, gene_chromstart, gene_chromend)
-            for key in mature_dict:
-                circle.barplot(key, data=[1] * len(mature_dict[key]["positions"]),
-                               positions=mature_dict[key]["positions"],
-                               width=mature_dict[key]["widths"],
-                               raxis_range=[raxis_range_start, raxis_range_end],
-                               edgecolor="black",
-                               facecolor=mirna_color)
+    # Barplot for mature miRNA
+    if args.mature is not None:
+        raxis_range_end = raxis_range_start + 20
+        mirna_color = "#FF8800"
+        mirna_mature = args.mature
+        mature_dict = find_features_on_gene(mirna_mature, gene_id, gene_chrom, gene_chromstart, gene_chromend)
+        for key in mature_dict:
+            circle.barplot(key, data=[1] * len(mature_dict[key]["positions"]),
+                           positions=mature_dict[key]["positions"],
+                           width=mature_dict[key]["widths"],
+                           raxis_range=[raxis_range_start, raxis_range_end],
+                           edgecolor="black",
+                           facecolor=mirna_color)
 
-        # Save the plot as specified in the command line
-        circle.figure.savefig(folder + "/" + gene_id + ".png")
+    # Save the plot as specified in the command line
+    circle.figure.savefig(folder + "/" + gene_id + ".png")
 
-        # Legende
-        # Position of the legend/rectangle
-        position_y = 10
-        position_y2 = 40
-        position_x = 10
+    # Legend
+    # Position of the legend/rectangle
+    position_y = 10
+    position_y2 = 40
+    position_x = 10
 
-        # Load the image
-        image = cv2.imread(folder + "/" + gene_id + ".png")
+    # Load the image
+    image = cv2.imread(folder + "/" + gene_id + ".png")
 
-        # Font, size, color and thickness for the text
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 1.1
-        font_color = (0, 0, 0)
-        font_thickness = 2
-        legend_position = (position_x, position_y2)
-        if args.mature is not None:
-            # rectangle (BGR color)
-            rgb = hex_to_rgb(mirna_color)
-            rectangle_color = (rgb[2], rgb[1], rgb[0])
-            rectangle_top_left = (position_x, position_y)
-            rectangle_bottom_right = (position_x + 40, position_y2)
-            cv2.rectangle(image, rectangle_top_left, rectangle_bottom_right, rectangle_color, thickness=cv2.FILLED)
+    # Font, size, color and thickness for the text
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = 1.1
+    font_color = (0, 0, 0)
+    font_thickness = 2
+    legend_position = (position_x, position_y2)
+    if args.mature is not None:
+        # rectangle (BGR color)
+        rgb = hex_to_rgb(mirna_color)
+        rectangle_color = (rgb[2], rgb[1], rgb[0])
+        rectangle_top_left = (position_x, position_y)
+        rectangle_bottom_right = (position_x + 40, position_y2)
+        cv2.rectangle(image, rectangle_top_left, rectangle_bottom_right, rectangle_color, thickness=cv2.FILLED)
 
-            legend_position = (position_x + 45, position_y2)
-            cv2.putText(image, "miRNA(*)", legend_position, font, font_scale, font_color, font_thickness)
+        legend_position = (position_x + 45, position_y2)
+        cv2.putText(image, "miRNA(*)", legend_position, font, font_scale, font_color, font_thickness)
 
-        position_y += 50
-        position_y2 += 50
+    position_y += 50
+    position_y2 += 50
 
+    if args.bindings is not None:
         legend_position = (position_x, position_y2)
         cv2.putText(image, "Binding sites from", legend_position, font, font_scale, font_color, font_thickness)
 
@@ -333,9 +335,10 @@ for feature in bed_file:
             # next color
             color_index += 1
 
-        position_y += 5
-        position_y2 += 5
+    position_y += 5
+    position_y2 += 5
 
+    if args.bw is not None:
         legend_position = (position_x, position_y2)
         cv2.putText(image, "Crosslink data for", legend_position, font, font_scale, font_color, font_thickness)
 
@@ -355,6 +358,6 @@ for feature in bed_file:
             position_y += 40
             position_y2 += 40
 
-        # Save the image with the added legend
-        cv2.imwrite(folder + "/" + gene_id + ".png", image)
+    # Save the image with the added legend
+    cv2.imwrite(folder + "/" + gene_id + ".png", image)
 
