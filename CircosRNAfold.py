@@ -106,7 +106,7 @@ def find_features_on_gene(bed_file, gene_name, gene_chrom, gene_chromstart, gene
     """
     arcdata_dict = collections.defaultdict(dict)
     bed_file = pybedtools.BedTool(bed_file)
-    # Filter out all irrelevant binding sites
+    # Filter out all irrelevant features
     for feature in bed_file:
         if feature.chrom == gene_chrom:
             if feature.start <= gene_chromend and feature.end >= gene_chromstart:
