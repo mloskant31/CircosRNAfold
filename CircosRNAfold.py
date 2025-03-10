@@ -8,7 +8,6 @@ import cv2
 import os
 import math
 
-
 # Command line flags
 parser = ArgumentParser()
 parser.add_argument("-g", "--genes", dest="genes", help="The genomic coordinates of genes in BED format", required=True)
@@ -16,14 +15,14 @@ parser.add_argument("-b", "--bindings", dest="bindings", nargs='+',
                     help="The binding sites of proteins in BED format (max. 4 files)",
                     required=False)
 parser.add_argument("-fi", "--fasta", dest="fasta", help="The chromosomal sequences as a FASTA file", required=True)
-parser.add_argument("-o", "--output", dest="output", help="Name of the folder in which all PNGs are saved", required=False,
+parser.add_argument("-o", "--output", dest="output", help="Name of the folder in which all PNGs are saved",
+                    required=False,
                     default="myCircos")
 parser.add_argument("-bw", dest="bw", nargs='+', help="BigWig file(s) with the raw data (max. 4 files)", required=False)
 parser.add_argument("-color", dest="color", nargs='+',
                     help="The colors for the iCLIP plots. If none or too few/too many colors are specified " +
                          "than there are specified bw files, default colors are used (max. 4 colors)", required=False)
 parser.add_argument("-m", dest="mature", help="The mature miRNA locations in BED format", required=False)
-
 
 args = parser.parse_args()
 genes = str(args.genes)
@@ -102,7 +101,7 @@ def find_features_on_gene(bed_file, gene_name, gene_chrom, gene_chromstart, gene
     Returns
     -------
     arcdata_dict: dict
-        A dictionary of the start positions and widths of the sequence on the circo plot
+        A dictionary of the start positions and widths of the sequence on the circos plot
     """
     arcdata_dict = collections.defaultdict(dict)
     bed_file = pybedtools.BedTool(bed_file)
@@ -121,7 +120,7 @@ def find_features_on_gene(bed_file, gene_name, gene_chrom, gene_chromstart, gene
                         arcdata_dict[gene_name]["widths"] = []
                     # Save position on the gene
                     arcdata_dict[gene_name]["positions"].append(abs(start))
-                    # Save length of the binding site
+                    # Save length of the feature
                     arcdata_dict[gene_name]["widths"].append(width)
     return arcdata_dict
 
@@ -294,6 +293,7 @@ for feature in bed_file:
     font_color = (0, 0, 0)
     font_thickness = 2
     legend_position = (position_x, position_y2)
+    # Legend for mature RNA(*)
     if args.mature is not None:
         # rectangle (BGR color)
         rgb = hex_to_rgb(mirna_color)
@@ -307,7 +307,7 @@ for feature in bed_file:
 
     position_y += 50
     position_y2 += 50
-
+    # Legend for bindings
     if args.bindings is not None:
         legend_position = (position_x, position_y2)
         cv2.putText(image, "Binding sites from", legend_position, font, font_scale, font_color, font_thickness)
@@ -337,7 +337,7 @@ for feature in bed_file:
 
     position_y += 5
     position_y2 += 5
-
+    # Legend for iCLIP data
     if args.bw is not None:
         legend_position = (position_x, position_y2)
         cv2.putText(image, "Crosslink data for", legend_position, font, font_scale, font_color, font_thickness)
@@ -360,4 +360,3 @@ for feature in bed_file:
 
     # Save the image with the added legend
     cv2.imwrite(folder + "/" + gene_id + ".png", image)
-
