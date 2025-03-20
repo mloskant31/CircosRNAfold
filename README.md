@@ -60,7 +60,7 @@ The binding sites and iCLIP data are taken from the supplement of Meyer et al. (
 <img src="img/MIR775.png" width="400x400">
 The result plot for the sample data set. From ~0 and from ~20 bp the binding sites can be seen (pink) and their iCLIP peaks (purple). At 250 bp the mature miRNA can be seen (orange). The legend is shown top left.
 
-## RNA Sequence
+## RNA sequence
 If the RNA sequence is less than or equal to 240 bp long and fewer than three bw files have been specified, the bases of the RNA sequence are shown as an external ring.
 
 # Setting raw data color(s)
